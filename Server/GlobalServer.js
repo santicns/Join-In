@@ -12,7 +12,7 @@
 */
 //====================================================================================================================================================================
 //
-//										CONNECTION TO LOCAL NODE SERVER
+//		CONNECTION TO LOCAL NODE SERVER
 //
 //
 //====================================================================================================================================================================
@@ -83,34 +83,28 @@ var server = http.createServer( function ( request , response ) {
 var socket = io.listen( server ); 		// Socket IO server instance.
 
 var kinectMap = {};
+
+
 // Add a connect listener
 socket.sockets.on( 'connection', function( client ){
 	
-	// Can get their ip address as a key?
+	// Store a global reference to the client connected.
+	if(gClient !== )
 	gClient = client;
-	console.log( "Client "+" connected" );
-	
-	/*		EXAMPLE USE
-	socket.sockets.emit('updatechat', client.username, message );		// send to every1
-	socket.sockets.send( 'updatechat', client.username, message );	    // but me
-	client.emit('updatechat', "Please enter your user name to chat");	// Only me
-	
-	*/
 	
 	/*
-		Get the kinect data from the server.
-	
+	    The browser calls this to retrieve the latest kinect data from the server.	
 	*/
 	client.on('kinect', function(  ){
-		console.log( "Get the kinect data from the server." );
+		
 		client.emit('passClientData', kinectMap);
 	});
 
 	/*
-		When the user disconnects.. perform this
+		When the user disconnects.. perform this.
 	*/
 	client.on('disconnect', function(){
-		// Remove if the player is an active player. So another can join...
+		
 		console.log("User disconnected");
 	});
 	
@@ -118,7 +112,7 @@ socket.sockets.on( 'connection', function( client ){
 });// End of 'onConnection'
 
 // Listen for connection
-server.listen( 7541 );
+server.listen( clientPort );
 
 
 
@@ -217,4 +211,4 @@ javaServer.on('connection', function ( javaSocket ) {
 });
 
 // Listen for connections on the java port specified!
-javaServer.listen( 7540);
+javaServer.listen( javaPort );
